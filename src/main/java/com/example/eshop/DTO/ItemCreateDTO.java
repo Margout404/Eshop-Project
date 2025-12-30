@@ -6,7 +6,7 @@ public record ItemCreateDTO(
         String name,
         String brand,
         String description,
-        BigDecimal price,
+        double price,
         int quantity
 ) {
 }

@@ -1,12 +1,10 @@
-package com.example.eshop.DTO;
+package com.example.eshop.DTO.cartDTO;
 
 import java.math.BigDecimal;
 
-public record ItemResponseDTO(
+public record CartItemResponseDTO(
         Long itemId,
         String name,
-        String brand,
-        String description,
         double price,
         int quantity
 ) {

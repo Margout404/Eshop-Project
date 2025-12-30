@@ -1,18 +1,19 @@
 package com.example.eshop.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "citizen")
 @Entity
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Citizen {
 
     @Id
+    @EqualsAndHashCode.Include
     private int afm;
 
     private String firstName;
@@ -20,7 +21,7 @@ public class Citizen {
     private String email;
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cartID",referencedColumnName = "cartID")
+    @OneToOne(mappedBy = "citizen",cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Cart cart;
 }

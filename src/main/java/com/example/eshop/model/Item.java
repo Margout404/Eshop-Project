@@ -26,7 +26,7 @@ public class Item {
     @Column(length = 500)
     private String description;
 
-    private BigDecimal price;
+    private double price;
 
     private int quantity;
 
