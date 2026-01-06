@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StoreRepository extends JpaRepository<Store,Integer> {
@@ -17,4 +18,6 @@ public interface StoreRepository extends JpaRepository<Store,Integer> {
     LEFT JOIN FETCH s.items
 """)
     List<Store> findAllWithItems();
+
+    Optional<Store> findByAfm(int afm);
 }

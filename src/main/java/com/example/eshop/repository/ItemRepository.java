@@ -12,4 +12,6 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item,Long> {
 
     List<Item> findByStore(Store store);
+    List<Item> findByPriceBetween(double min,double max);
+    List<Item> findByNameContainingIgnoreCase(String name);
 }

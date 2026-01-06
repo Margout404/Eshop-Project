@@ -50,4 +50,12 @@ public class ItemService {
 
         return StoreMapper.toDTO(updatedItem);
     }
+
+    public List<ItemResponseDTO> searchByName(String name){
+        return itemRepository.findByNameContainingIgnoreCase(name).stream().map(StoreMapper::toDTO).toList();
+    }
+
+    public List<ItemResponseDTO> searchByPrice(double min, double max){
+        return itemRepository.findByPriceBetween(min,max).stream().map(StoreMapper::toDTO).toList();
+    }
 }
