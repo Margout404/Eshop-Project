@@ -24,4 +24,25 @@ public class Citizen {
     @OneToOne(mappedBy = "citizen",cascade = CascadeType.ALL)
     @ToString.Exclude
     private Cart cart;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public int getAfm() {
+        return afm;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
 }
