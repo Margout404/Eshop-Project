@@ -21,23 +21,5 @@ public class Store {
 
     @OneToMany(mappedBy="store", fetch = FetchType.LAZY)
     private List<Item> items;
-    public int getAfm() {
-        return afm;
-    }
 
-    public String getStoreName() {
-        return storeName;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
 }
