@@ -24,27 +24,22 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequest) {
 
-        // 1. Έλεγχος αν είναι Πολίτης
         Optional<Citizen> citizenOpt = citizenRepository.findById(loginRequest.afm());
         if (citizenOpt.isPresent()) {
             Citizen citizen = citizenOpt.get();
-            // Προσοχή: Ελέγχουμε αν ταιριάζει ο κωδικός
             if (citizen.getPassword().equals(loginRequest.password())) {
                 return new LoginResponseDTO(true, "Login Successful", "CITIZEN", citizen.getAfm(), citizen.getFirstName() + " " + citizen.getLastName());
             }
         }
 
-        // 2. Έλεγχος αν είναι Μαγαζί
         Optional<Store> storeOpt = storeRepository.findById(loginRequest.afm());
         if (storeOpt.isPresent()) {
             Store store = storeOpt.get();
-            // Προσοχή: Ελέγχουμε αν ταιριάζει ο κωδικός
             if (store.getPassword().equals(loginRequest.password())) {
                 return new LoginResponseDTO(true, "Login Successful", "STORE", store.getAfm(), store.getStoreName());
             }
         }
 
-        // 3. Δεν βρέθηκε ή λάθος κωδικός
         return new LoginResponseDTO(false, "Invalid credentials", null, 0, null);
     }
 }

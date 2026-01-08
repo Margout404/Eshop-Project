@@ -99,12 +99,10 @@ public class CartService {
             if(item.getQuantity()< it.getQuantity()){
                 throw new IllegalArgumentException("Not enough stock for item : "+ item.getName());
             }
-        }
-        for(CartItem it : cart.getItems()){
-            Item item = it.getItem();
             item.setQuantity(item.getQuantity()-it.getQuantity());
             itemRepository.save(item);
         }
+
         cart.getItems().clear();
         cart.setCartPrice(0.0);
         cartRepository.save(cart);
