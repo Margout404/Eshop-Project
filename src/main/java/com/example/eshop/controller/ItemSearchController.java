@@ -17,12 +17,12 @@ public class ItemSearchController {
 
 
     @GetMapping("/search")
-    public List<ItemResponseDTO> getItemsByName(@PathVariable("storeAfm") int afm, @RequestParam String name){
+    public List<ItemResponseDTO> getItemsByName(@RequestParam String name){
         return itemService.searchByName(name);
     }
 
     @GetMapping("/searchByPrice")
-    public List<ItemResponseDTO> getItemsByPrice(@PathVariable("storeAfm") int afm, @RequestParam double min,@RequestParam double max){
+    public List<ItemResponseDTO> getItemsByPrice(@RequestParam double min,@RequestParam double max){
         return itemService.searchByPrice(min,max);
     }
 }
