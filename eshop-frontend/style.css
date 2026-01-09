@@ -1,0 +1,20 @@
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+.container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+h1, h2, h3 { text-align: center; color: #333; }
+.hidden { display: none; }
+.form-group { margin-bottom: 15px; }
+.form-group-input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 10px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
+input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+.input-small { margin-bottom: 5px; display: block; width: 100%; }
+button { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px;}
+button:hover { background-color: #218838; }
+button.logout { background-color: #dc3545; margin-top: 20px; }
+button.logout:hover { background-color: #c82333; }
+.list-item { border-bottom: 1px solid #eee; padding: 10px; display: flex; justify-content: space-between; align-items: center; background: #fff; margin-bottom: 5px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.card { padding: 15px; border-radius: 5px; background: #f9f9f9; margin-bottom: 15px; }
+#message-box { padding: 10px; margin-bottom: 10px; border-radius: 4px; text-align: center; display: none; }
+.success { background-color: #d4edda; color: #155724; }
+.error { background-color: #f8d7da; color: #721c24; }
+.nav-buttons { display: flex; gap: 10px; margin-bottom: 20px; }
+.nav-buttons button { background-color: #007bff; }

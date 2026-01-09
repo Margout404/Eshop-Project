@@ -9,11 +9,9 @@ import java.util.List;
 public class StoreMapper {
     public static StoreResponseDTO toDTO(Store store) {
 
-        List<ItemResponseDTO> items =
-                new ArrayList<>(store.getItems())
-                        .stream()
-                        .map(StoreMapper::toDTO)
-                        .toList();
+        List<ItemResponseDTO> items = (store.getItems() != null)
+                ? store.getItems().stream().map(StoreMapper::toDTO).toList()
+                : new ArrayList<>();
 
         return new StoreResponseDTO(
                 store.getAfm(),
