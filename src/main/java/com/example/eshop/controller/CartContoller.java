@@ -27,6 +27,10 @@ public class CartContoller {
         cartService.checkout(citizenAfm);
         return "Purchase completed successfully";
     }
+    @DeleteMapping("/{citizenAfm}/items/{itemId}")
+    public void removeItem(@PathVariable int citizenAfm, @PathVariable Long itemId) {
+        cartService.removeItemFromCart(citizenAfm, itemId);
+    }
 
 
 }

@@ -67,6 +67,11 @@
         <button onclick="loadStoreItems()" style="width: auto; background: #17a2b8; margin-bottom: 10px;">Ανανέωση Λίστας</button>
         <div id="store-items-list"></div>
 
+        <div style="margin-top:20px; border-top:1px solid #ccc; padding-top:10px;">
+             <button onclick="showHistory('store')" style="background:#17a2b8;">Προβολή Ιστορικού Πωλήσεων</button>
+             <div id="store-history-list" class="hidden" style="margin-top:10px; background:#e9ecef; padding:10px;"></div>
+        </div>
+
         <button class="logout" onclick="logout()">Αποσύνδεση</button>
     </div>
 
@@ -82,11 +87,23 @@
             <button onclick="checkout()" style="margin-top:10px;">Ολοκλήρωση Αγοράς</button>
         </div>
 
-        <h3>Διαθέσιμα Προϊόντα</h3>
-        <div style="display: flex; gap: 5px; margin-bottom: 15px;">
-            <input type="text" id="search-term" placeholder="Αναζήτηση..." style="padding:8px;">
-            <button onclick="searchItems()" style="width: 30%;">Ψάξε</button>
-            <button onclick="loadAllProducts()" style="width: 30%; background: #6f42c1;">Δείξε Όλα</button>
+        <div style="margin-top:20px; border-top:1px solid #ccc; padding-top:10px;">
+             <button onclick="showHistory('citizen')" style="background:#17a2b8;">Προβολή Ιστορικού Αγορών</button>
+             <div id="citizen-history-list" class="hidden" style="margin-top:10px; background:#e9ecef; padding:10px;"></div>
+        </div>
+
+        <h3>Αναζήτηση Προϊόντων</h3>
+        <div class="card">
+            <input type="text" id="search-term" placeholder="Όνομα..." class="input-small">
+            <div style="display:flex; gap:10px;">
+                <input type="number" id="min-price" placeholder="Ελάχιστη Τιμή" class="input-small">
+                <input type="number" id="max-price" placeholder="Μέγιστη Τιμή" class="input-small">
+            </div>
+            <div style="display:flex; gap:10px; margin-top:5px;">
+                <button onclick="searchItems()" style="width: 50%;">Ψάξε (Όνομα)</button>
+                <button onclick="searchByPrice()" style="width: 50%; background:#6610f2;">Ψάξε (Τιμή)</button>
+            </div>
+            <button onclick="loadAllProducts()" style="width: 100%; background: #6f42c1; margin-top:5px;">Δείξε Όλα</button>
         </div>
         
         <div id="all-products-list"></div>

@@ -42,7 +42,7 @@ async function login() {
                 document.getElementById('citizen-name-display').textContent = data.name;
                 showSection('citizen-dashboard');
                 loadCart();
-                loadAllProducts(); // <--- ΑΥΤΟ ΦΟΡΤΩΝΕΙ ΤΑ ΠΡΟΪΟΝΤΑ ΑΥΤΟΜΑΤΑ
+                loadAllProducts(); 
             }
         } else {
             showMessage(data.message, 'error');
@@ -132,14 +132,12 @@ async function loadStoreItems() {
 
 
 async function loadAllProducts() {
-    // Αν δεν έβαλες το endpoint "/all", δοκίμασε το: "/items/search?name="
     try {
         const res = await fetch(`${API_URL}/items/all`); 
         if(!res.ok) throw new Error("Failed");
         const items = await res.json();
         renderProducts(items);
     } catch(e) {
-        // Fallback αν δεν έβαλες το /all
         searchItems("");
     }
 }
@@ -206,9 +204,12 @@ async function loadCart() {
         const list = document.getElementById('cart-items');
         if (cart.items && cart.items.length > 0) {
             list.innerHTML = cart.items.map(i => `
-                <div style="border-bottom: 1px dotted #ccc; padding: 5px; display:flex; justify-content:space-between;">
+                <div style="border-bottom: 1px dotted #ccc; padding: 5px; display:flex; justify-content:space-between; align-items:center;">
                     <span>${i.name} x ${i.quantity}</span>
-                    <span><b>${(i.price * i.quantity).toFixed(2)}€</b></span>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span><b>${(i.price * i.quantity).toFixed(2)}€</b></span>
+                        <button onclick="removeFromCart(${i.itemId})" style="background:#dc3545; padding: 2px 8px; font-size:12px; margin:0;">X</button>
+                    </div>
                 </div>
             `).join('');
         } else {
@@ -217,12 +218,80 @@ async function loadCart() {
     } catch(e) { console.log(e); }
 }
 
+async function removeFromCart(itemId) {
+    try {
+        const res = await fetch(`${API_URL}/cart/${currentUser.afm}/items/${itemId}`, {
+            method: 'DELETE'
+        });
+
+        if (res.ok) {
+            loadCart(); 
+            showMessage("Το προϊόν αφαιρέθηκε.", 'success');
+        } else {
+            showMessage("Σφάλμα κατά τη διαγραφή.", 'error');
+        }
+    } catch (e) {
+        showMessage("Network Error", 'error');
+    }
+}
+
+// --- ΑΝΑΖΗΤΗΣΗ ΜΕ ΤΙΜΗ ---
+async function searchByPrice() {
+    const min = document.getElementById('min-price').value || 0;
+    const max = document.getElementById('max-price').value || 999999;
+    
+    // Σημείωση: Στο ItemSearchController πρέπει να υπάρχει το endpoint /searchByPrice
+    // Αν δεν δουλεύει, έλεγξε αν στο Controller ζητάει path variable storeAfm. 
+    // Αν ναι, βάλε ένα τυχαίο (π.χ. 0) στο URL: /items/0/searchByPrice?min=...
+    try {
+        const res = await fetch(`${API_URL}/items/searchByPrice?storeAfm=0&min=${min}&max=${max}`);
+        const items = await res.json();
+        renderProducts(items);
+    } catch(e) {
+        showMessage("Σφάλμα αναζήτησης τιμής", 'error');
+    }
+}
+
+async function showHistory(type) {
+    const listId = type === 'citizen' ? 'citizen-history-list' : 'store-history-list';
+    const listDiv = document.getElementById(listId);
+    
+    if (!listDiv.classList.contains('hidden')) {
+        listDiv.classList.add('hidden');
+        return;
+    }
+
+    const endpoint = type === 'citizen' 
+        ? `/history/citizen/${currentUser.afm}` 
+        : `/history/store/${currentUser.afm}`;
+
+    try {
+        const res = await fetch(API_URL + endpoint);
+        const history = await res.json();
+        
+        listDiv.classList.remove('hidden');
+        if (history.length === 0) {
+            listDiv.innerHTML = "<p>Δεν υπάρχει ιστορικό.</p>";
+            return;
+        }
+
+        listDiv.innerHTML = history.map(h => `
+            <div style="border-bottom:1px solid #999; padding:5px; font-size:0.9em;">
+                <b>${h.productName}</b> x ${h.quantity} (${h.totalPrice}€)<br>
+                <span style="color:#555; font-size:0.8em;">${new Date(h.date).toLocaleString()}</span>
+            </div>
+        `).join('');
+    } catch (e) {
+        showMessage("Σφάλμα φόρτωσης ιστορικού", 'error');
+    }
+}
+
 async function checkout() {
     const res = await fetch(`${API_URL}/cart/checkout/${currentUser.afm}`, { method: 'POST' });
     if (res.ok) {
         showMessage("Η αγορά ολοκληρώθηκε επιτυχώς!", 'success');
         loadCart();
-        loadAllProducts(); // Ανανέωσε τη λίστα για να φανούν τα μειωμένα αποθέματα
+        loadAllProducts();
     } else {
         showMessage("Σφάλμα κατά την αγορά.", 'error');
     }

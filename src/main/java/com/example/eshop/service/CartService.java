@@ -30,6 +30,9 @@ public class CartService {
     @Autowired
     CartItemRepository cartItemRepository;
 
+    @Autowired
+    com.example.eshop.repository.PurchaseHistoryRepository historyRepository;
+
     @Transactional
     public CartResponseDTO addItemToCart(AddToCartDTO dto){
         Citizen citizen= citizenRepository.findById(dto.citizenAfm())
@@ -91,20 +94,53 @@ public class CartService {
     }
 
     @Transactional
-    public void checkout(int citizenAfm){
-        Cart cart = cartRepository.findByCitizenAfm(citizenAfm).orElseThrow(()-> new RuntimeException("Cart not found"));
+    public void checkout(int citizenAfm) {
+        Cart cart = cartRepository.findByCitizenAfm(citizenAfm)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
 
-        for(CartItem it: cart.getItems()){
-            Item item = it.getItem();
-            if(item.getQuantity()< it.getQuantity()){
-                throw new IllegalArgumentException("Not enough stock for item : "+ item.getName());
+        for (CartItem it : cart.getItems()) {
+            if (it.getItem().getQuantity() < it.getQuantity()) {
+                throw new IllegalArgumentException("Δεν υπάρχει αρκετό απόθεμα για: " + it.getItem().getName());
             }
-            item.setQuantity(item.getQuantity()-it.getQuantity());
+        }
+
+        for (CartItem it : cart.getItems()) {
+            Item item = it.getItem();
+
+            item.setQuantity(item.getQuantity() - it.getQuantity());
             itemRepository.save(item);
+
+            com.example.eshop.model.PurchaseHistory history = new com.example.eshop.model.PurchaseHistory();
+            history.setCitizenAfm(citizenAfm);
+            history.setStoreAfm(item.getStore().getAfm());
+            history.setProductName(item.getName());
+            history.setQuantity(it.getQuantity());
+            history.setTotalPrice(it.getQuantity() * item.getPrice());
+            history.setDate(java.time.LocalDateTime.now());
+
+            historyRepository.save(history);
         }
 
         cart.getItems().clear();
         cart.setCartPrice(0.0);
         cartRepository.save(cart);
+    }
+
+    @Transactional
+    public void removeItemFromCart(int citizenAfm, Long itemId) {
+        Cart cart = cartRepository.findByCitizenAfm(citizenAfm)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+
+        boolean removed = cart.getItems().removeIf(ci -> ci.getItem().getItemId().equals(itemId));
+
+        if (removed) {
+            double total = 0;
+            for (CartItem itemInCart : cart.getItems()) {
+                total += itemInCart.getQuantity() * itemInCart.getItem().getPrice();
+            }
+            cart.setCartPrice(total);
+
+            cartRepository.save(cart);
+        }
     }
 }
