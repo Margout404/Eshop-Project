@@ -25,7 +25,7 @@ public class CartContoller {
     @PostMapping("/checkout/{citizenAfm}")
     public String checkout(@PathVariable int citizenAfm) {
         cartService.checkout(citizenAfm);
-        return "Purchase completed successfully";
+        return "Η αγορά ολοκληρώθηκε";
     }
     @DeleteMapping("/{citizenAfm}/items/{itemId}")
     public void removeItem(@PathVariable int citizenAfm, @PathVariable Long itemId) {

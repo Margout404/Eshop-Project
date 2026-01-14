@@ -3,10 +3,7 @@ package com.example.eshop.service;
 import com.example.eshop.DTO.cartDTO.AddToCartDTO;
 import com.example.eshop.DTO.cartDTO.CartMapper;
 import com.example.eshop.DTO.cartDTO.CartResponseDTO;
-import com.example.eshop.model.Cart;
-import com.example.eshop.model.CartItem;
-import com.example.eshop.model.Citizen;
-import com.example.eshop.model.Item;
+import com.example.eshop.model.*;
 import com.example.eshop.repository.CartItemRepository;
 import com.example.eshop.repository.CartRepository;
 import com.example.eshop.repository.CitizenRepository;
@@ -96,7 +93,7 @@ public class CartService {
     @Transactional
     public void checkout(int citizenAfm) {
         Cart cart = cartRepository.findByCitizenAfm(citizenAfm)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> new RuntimeException("Δεν βρέθηκε καλάθι για αυτον τον χρήστη με ΑΦΜ : " + citizenAfm));
 
         for (CartItem it : cart.getItems()) {
             if (it.getItem().getQuantity() < it.getQuantity()) {
@@ -110,7 +107,7 @@ public class CartService {
             item.setQuantity(item.getQuantity() - it.getQuantity());
             itemRepository.save(item);
 
-            com.example.eshop.model.PurchaseHistory history = new com.example.eshop.model.PurchaseHistory();
+            PurchaseHistory history = new PurchaseHistory();
             history.setCitizenAfm(citizenAfm);
             history.setStoreAfm(item.getStore().getAfm());
             history.setProductName(item.getName());
@@ -129,7 +126,7 @@ public class CartService {
     @Transactional
     public void removeItemFromCart(int citizenAfm, Long itemId) {
         Cart cart = cartRepository.findByCitizenAfm(citizenAfm)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> new RuntimeException("Δεν βρέθηκε καλάθι"));
 
         boolean removed = cart.getItems().removeIf(ci -> ci.getItem().getItemId().equals(itemId));
 

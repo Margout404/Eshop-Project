@@ -28,7 +28,7 @@ public class AuthController {
         if (citizenOpt.isPresent()) {
             Citizen citizen = citizenOpt.get();
             if (citizen.getPassword().equals(loginRequest.password())) {
-                return new LoginResponseDTO(true, "Login Successful", "CITIZEN", citizen.getAfm(), citizen.getFirstName() + " " + citizen.getLastName());
+                return new LoginResponseDTO(true, "Επιτυχής σύνδεση", "CITIZEN", citizen.getAfm(), citizen.getFirstName() + " " + citizen.getLastName());
             }
         }
 
@@ -36,10 +36,10 @@ public class AuthController {
         if (storeOpt.isPresent()) {
             Store store = storeOpt.get();
             if (store.getPassword().equals(loginRequest.password())) {
-                return new LoginResponseDTO(true, "Login Successful", "STORE", store.getAfm(), store.getStoreName());
+                return new LoginResponseDTO(true, "Επιτυχής σύνδεση", "STORE", store.getAfm(), store.getStoreName());
             }
         }
 
-        return new LoginResponseDTO(false, "Invalid credentials", null, 0, null);
+        return new LoginResponseDTO(false, "Το ΑΦΜ ή ο κωδικός πρόσβασης είναι λανθασμένα", null, 0, null);
     }
 }
