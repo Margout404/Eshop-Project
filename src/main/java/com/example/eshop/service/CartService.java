@@ -4,14 +4,10 @@ import com.example.eshop.DTO.cartDTO.AddToCartDTO;
 import com.example.eshop.DTO.cartDTO.CartMapper;
 import com.example.eshop.DTO.cartDTO.CartResponseDTO;
 import com.example.eshop.model.*;
-import com.example.eshop.repository.CartItemRepository;
-import com.example.eshop.repository.CartRepository;
-import com.example.eshop.repository.CitizenRepository;
-import com.example.eshop.repository.ItemRepository;
+import com.example.eshop.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 @Service
 public class CartService {
@@ -28,7 +24,7 @@ public class CartService {
     CartItemRepository cartItemRepository;
 
     @Autowired
-    com.example.eshop.repository.PurchaseHistoryRepository historyRepository;
+    PurchaseHistoryRepository historyRepository;
 
     @Transactional
     public CartResponseDTO addItemToCart(AddToCartDTO dto){
