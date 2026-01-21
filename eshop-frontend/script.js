@@ -149,16 +149,52 @@ async function loadStoreItems() {
   const res = await fetch(`${API_URL}/stores/${currentUser.afm}/items`);
   const items = await res.json();
   const list = document.getElementById("store-items-list");
-  list.innerHTML = items
-    .map(
-      (i) => `
-        <div class="list-item">
-            <span><b>${i.name}</b> (${i.quantity} τμχ) - ${i.price}€</span>
-        </div>
-    `
-    )
-    .join("");
+  list.innerHTML = items.map(i => `
+  <div class="list-item" style="display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <b>${i.name}</b> - ${i.price}€ <br>
+      <small>Τρέχουσα ποσότητα: ${i.quantity}</small>
+    </div>
+
+    <div style="display:flex; gap:5px; align-items:center;">
+      <input 
+        type="number" 
+        id="new-qty-${i.itemId}" 
+        value="${i.quantity}" 
+        min="0"
+        style="width:60px"
+      />
+      <button onclick="updateQuantity(${i.itemId})">
+        ✔
+      </button>
+    </div>
+  </div>
+`).join("");
 }
+async function updateQuantity(itemId) {
+  const newQty = document.getElementById(`new-qty-${itemId}`).value;
+
+  try {
+    const res = await fetch(
+      `${API_URL}/stores/${currentUser.afm}/items/${itemId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parseInt(newQty))
+      }
+    );
+
+    if (res.ok) {
+      showMessage("Η ποσότητα ενημερώθηκε", "success");
+      loadStoreItems();
+    } else {
+      showMessage("Σφάλμα ενημέρωσης ποσότητας", "error");
+    }
+  } catch (e) {
+    showMessage("Network error", "error");
+  }
+}
+
 
 async function loadAllProducts() {
   try {
