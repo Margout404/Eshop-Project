@@ -43,9 +43,9 @@ public class ItemService {
     public ItemResponseDTO updateItemQuantity(Long itemId, int newQuantity) {
 
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("Item not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Το αντικείμενο δεν βρέθηκε"));
 
-        item.setQuantity(newQuantity);
+        item.setQuantity(item.getQuantity() + newQuantity);
         Item updatedItem = itemRepository.save(item);
 
         return StoreMapper.toDTO(updatedItem);

@@ -22,7 +22,7 @@ public class ItemSearchController {
     }
 
     @GetMapping("/searchByPrice")
-    public List<ItemResponseDTO> getItemsByPrice(@RequestParam double min,@RequestParam double max){
+    public List<ItemResponseDTO> getItemsByPrice( @RequestParam double min,@RequestParam double max){
         return itemService.searchByPrice(min,max);
     }
 }

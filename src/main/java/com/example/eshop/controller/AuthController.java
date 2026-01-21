@@ -1,0 +1,45 @@
+package com.example.eshop.controller;
+
+import com.example.eshop.DTO.LoginRequestDTO;
+import com.example.eshop.DTO.LoginResponseDTO;
+import com.example.eshop.model.Citizen;
+import com.example.eshop.model.Store;
+import com.example.eshop.repository.CitizenRepository;
+import com.example.eshop.repository.StoreRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+    @Autowired
+    CitizenRepository citizenRepository;
+
+    @Autowired
+    StoreRepository storeRepository;
+
+    @PostMapping("/login")
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequest) {
+
+        Optional<Citizen> citizenOpt = citizenRepository.findById(loginRequest.afm());
+        if (citizenOpt.isPresent()) {
+            Citizen citizen = citizenOpt.get();
+            if (citizen.getPassword().equals(loginRequest.password())) {
+                return new LoginResponseDTO(true, "Επιτυχής σύνδεση", "CITIZEN", citizen.getAfm(), citizen.getFirstName() + " " + citizen.getLastName());
+            }
+        }
+
+        Optional<Store> storeOpt = storeRepository.findById(loginRequest.afm());
+        if (storeOpt.isPresent()) {
+            Store store = storeOpt.get();
+            if (store.getPassword().equals(loginRequest.password())) {
+                return new LoginResponseDTO(true, "Επιτυχής σύνδεση", "STORE", store.getAfm(), store.getStoreName());
+            }
+        }
+
+        return new LoginResponseDTO(false, "Το ΑΦΜ ή ο κωδικός πρόσβασης είναι λανθασμένα", null, 0, null);
+    }
+}

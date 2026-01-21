@@ -23,7 +23,7 @@ public class StoreService {
 
     public StoreResponseDTO createStore(StoreCreateDTO dto){
         if(storeRepository.findByAfm(dto.afm()).isPresent()){
-            throw new IllegalArgumentException("Store with this Afm already exists");
+            throw new IllegalArgumentException("Υπάρχει κατάστημα με αυτο το ΑΦΜ :"+ dto.afm());
         }
         Store store = new Store();
         store.setAfm(dto.afm());

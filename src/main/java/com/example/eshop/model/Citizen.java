@@ -24,4 +24,6 @@ public class Citizen {
     @OneToOne(mappedBy = "citizen",cascade = CascadeType.ALL)
     @ToString.Exclude
     private Cart cart;
+
+
 }

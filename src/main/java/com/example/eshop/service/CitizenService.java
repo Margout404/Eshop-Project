@@ -18,7 +18,10 @@ public class CitizenService {
 
     public CitizenResponseDTO createCitizen(CitizenCreateDTO dto){
         if (citizenRepository.findByEmail(dto.email()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new IllegalArgumentException("Υπάρχει χρήστης με αυτο το email : "+ dto.email());
+        }
+        if (citizenRepository.findById(dto.afm()).isPresent()){
+            throw new IllegalArgumentException("Υπάρχει χρήστης με αυτο το ΑΦΜ : "+ dto.afm());
         }
         Citizen citizen=new Citizen();
         citizen.setAfm(dto.afm());
@@ -33,7 +36,7 @@ public class CitizenService {
         return citizenRepository.findAll().stream().map(CitizenMapper::toDTO).toList();
     }
     public CitizenResponseDTO getCitizenByAfm(int afm){
-        Citizen citizen = citizenRepository.findById(afm).orElseThrow(()-> new IllegalArgumentException("Citizen not found"));
+        Citizen citizen = citizenRepository.findById(afm).orElseThrow(()-> new IllegalArgumentException("Ο χρήστης δεν βρέθηκε"));
         return CitizenMapper.toDTO(citizen);
     }
 }

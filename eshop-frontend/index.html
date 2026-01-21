@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="el">
+  <head>
+    <meta charset="UTF-8" />
+    <title>E-Shop System</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Σύστημα E-Shop</h1>
+      <div id="message-box"></div>
+
+      <div id="login-section">
+        <h2>Σύνδεση</h2>
+        <div class="form-group">
+          <label>ΑΦΜ:</label>
+          <input type="number" id="login-afm" placeholder="123456" />
+        </div>
+        <div class="form-group">
+          <label>Κωδικός:</label>
+          <input type="password" id="login-pass" placeholder="******" />
+        </div>
+        <button onclick="login()">Είσοδος</button>
+        <p style="text-align: center; margin-top: 10px">
+          Δεν έχετε λογαριασμό;
+        </p>
+        <div class="nav-buttons">
+          <button
+            onclick="showSection('register-citizen-section')"
+            style="background: #6c757d"
+          >
+            Εγγραφή Πολίτη
+          </button>
+          <button
+            onclick="showSection('register-store-section')"
+            style="background: #6c757d"
+          >
+            Εγγραφή Μαγαζιού
+          </button>
+        </div>
+      </div>
+
+      <div id="register-citizen-section" class="hidden">
+        <h2>Εγγραφή Πολίτη</h2>
+        <input
+          type="number"
+          id="reg-cit-afm"
+          placeholder="ΑΦΜ"
+          class="form-group-input"
+        />
+        <input
+          type="text"
+          id="reg-cit-fname"
+          placeholder="Όνομα"
+          class="form-group-input"
+        />
+        <input
+          type="text"
+          id="reg-cit-lname"
+          placeholder="Επώνυμο"
+          class="form-group-input"
+        />
+        <input
+          type="email"
+          id="reg-cit-email"
+          placeholder="Email"
+          class="form-group-input"
+        />
+        <input
+          type="password"
+          id="reg-cit-pass"
+          placeholder="Κωδικός"
+          class="form-group-input"
+        />
+        <button onclick="registerCitizen()">Εγγραφή</button>
+        <button
+          onclick="showSection('login-section')"
+          style="background: #6c757d"
+        >
+          Πίσω
+        </button>
+      </div>
+
+      <div id="register-store-section" class="hidden">
+        <h2>Εγγραφή Μαγαζιού</h2>
+        <input
+          type="number"
+          id="reg-store-afm"
+          placeholder="ΑΦΜ"
+          class="form-group-input"
+        />
+        <input
+          type="text"
+          id="reg-store-name"
+          placeholder="Επωνυμία Καταστήματος"
+          class="form-group-input"
+        />
+        <input
+          type="text"
+          id="reg-store-owner"
+          placeholder="Ιδιοκτήτης"
+          class="form-group-input"
+        />
+        <input
+          type="password"
+          id="reg-store-pass"
+          placeholder="Κωδικός"
+          class="form-group-input"
+        />
+        <button onclick="registerStore()">Εγγραφή</button>
+        <button
+          onclick="showSection('login-section')"
+          style="background: #6c757d"
+        >
+          Πίσω
+        </button>
+      </div>
+
+      <div id="store-dashboard" class="hidden">
+        <h2>Καλωσήρθατε <span id="store-name-display"></span> (Μαγαζί)</h2>
+
+        <h3>Προσθήκη Νέου Προϊόντος</h3>
+        <div class="card">
+          <input
+            type="text"
+            id="prod-name"
+            placeholder="Όνομα Προϊόντος"
+            class="input-small"
+          />
+          <input
+            type="text"
+            id="prod-brand"
+            placeholder="Μάρκα"
+            class="input-small"
+          />
+          <input
+            type="text"
+            id="prod-desc"
+            placeholder="Περιγραφή"
+            class="input-small"
+          />
+          <input
+            type="number"
+            id="prod-price"
+            placeholder="Τιμή (€)"
+            class="input-small"
+          />
+          <input
+            type="number"
+            id="prod-qty"
+            placeholder="Ποσότητα"
+            class="input-small"
+          />
+          <button onclick="addProduct()">Προσθήκη</button>
+        </div>
+
+        <h3>Τα Προϊόντα μου</h3>
+        <button
+          onclick="loadStoreItems()"
+          style="width: auto; background: #17a2b8; margin-bottom: 10px"
+        >
+          Ανανέωση Λίστας
+        </button>
+        <div id="store-items-list"></div>
+
+        <div
+          style="
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+          "
+        >
+          <button onclick="showHistory('store')" style="background: #17a2b8">
+            Προβολή Ιστορικού Πωλήσεων
+          </button>
+          <div
+            id="store-history-list"
+            class="hidden"
+            style="margin-top: 10px; background: #e9ecef; padding: 10px"
+          ></div>
+        </div>
+
+        <button class="logout" onclick="logout()">Αποσύνδεση</button>
+      </div>
+
+      <div id="citizen-dashboard" class="hidden">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <h2>Καλωσήρθατε <span id="citizen-name-display"></span></h2>
+          <button
+            class="logout"
+            onclick="logout()"
+            style="width: auto; margin: 0"
+          >
+            Έξοδος
+          </button>
+        </div>
+
+        <h3>Το Καλάθι μου: <span id="cart-total">0</span> €</h3>
+        <div id="cart-display" class="card" style="background: #fff3cd">
+          <div id="cart-items">Το καλάθι είναι άδειο</div>
+          <button onclick="checkout()" style="margin-top: 10px">
+            Ολοκλήρωση Αγοράς
+          </button>
+        </div>
+
+        <div
+          style="
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+          "
+        >
+          <button onclick="showHistory('citizen')" style="background: #17a2b8">
+            Προβολή Ιστορικού Αγορών
+          </button>
+          <div
+            id="citizen-history-list"
+            class="hidden"
+            style="margin-top: 10px; background: #e9ecef; padding: 10px"
+          ></div>
+        </div>
+
+        <h3>Αναζήτηση Προϊόντων</h3>
+        <div class="card">
+          <input
+            type="text"
+            id="search-term"
+            placeholder="Όνομα..."
+            class="input-small"
+          />
+          <div style="display: flex; gap: 10px">
+            <input
+              type="number"
+              id="min-price"
+              placeholder="Ελάχιστη Τιμή"
+              class="input-small"
+            />
+            <input
+              type="number"
+              id="max-price"
+              placeholder="Μέγιστη Τιμή"
+              class="input-small"
+            />
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 5px">
+            <button onclick="searchItems()" style="width: 50%">
+              Ψάξε (Όνομα)
+            </button>
+            <button
+              onclick="searchByPrice()"
+              style="width: 50%; background: #6610f2"
+            >
+              Ψάξε (Τιμή)
+            </button>
+          </div>
+          <button
+            onclick="loadAllProducts()"
+            style="width: 100%; background: #6f42c1; margin-top: 5px"
+          >
+            Δείξε Όλα
+          </button>
+        </div>
+
+        <div id="all-products-list"></div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +18,8 @@ public class Store {
     private String storeName;
     private String owner;
     private String password;
+
     @OneToMany(mappedBy="store", fetch = FetchType.LAZY)
     private List<Item> items;
+
 }
